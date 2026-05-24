@@ -1,0 +1,47 @@
+def score_fundamentals(data: dict) -> dict:
+    score = 50
+    reasons = []
+
+    pe = data.get("trailing_pe")
+    revenue_growth = data.get("revenue_growth")
+    profit_margins = data.get("profit_margins")
+    six_month_return = data.get("six_month_return_pct")
+
+    if revenue_growth is not None:
+        if revenue_growth > 0.20:
+            score += 15
+            reasons.append("Strong revenue growth")
+        elif revenue_growth < 0:
+            score -= 15
+            reasons.append("Negative revenue growth")
+
+    if profit_margins is not None:
+        if profit_margins > 0.15:
+            score += 10
+            reasons.append("Healthy profit margins")
+        elif profit_margins < 0:
+            score -= 15
+            reasons.append("Negative profit margins")
+
+    if pe is not None:
+        if pe > 80:
+            score -= 10
+            reasons.append("High valuation risk")
+        elif pe < 25:
+            score += 5
+            reasons.append("Reasonable valuation")
+
+    if six_month_return is not None:
+        if six_month_return > 50:
+            score += 10
+            reasons.append("Strong price momentum")
+        elif six_month_return < -30:
+            score -= 10
+            reasons.append("Weak price momentum")
+
+    score = max(0, min(100, score))
+
+    return {
+        "fundamental_score": score,
+        "reasons": reasons
+    }
